@@ -13,6 +13,8 @@
         "vite": "^4.0.0"
     },
     "dependencies": {
-        "lodash": "^4.17.21"
+        "jquery": "^3.6.4",
+        "lodash": "^4.17.21",
+        "toastr": "^2.1.4"
     }
 }

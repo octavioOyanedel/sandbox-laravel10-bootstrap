@@ -19,6 +19,9 @@ class Select3nv1 extends Component
     public $new_provincia = '';
     public $new_comuna = '';
 
+    // validaciones
+    public $val_comuna = '';
+
     // estado actual de distrito
     public $distrito_actual = '';
 
@@ -63,18 +66,13 @@ class Select3nv1 extends Component
     // bloque agregar nuevos registros
     public function agregar_nueva_comuna()
     {
-        // validacion previa para evitar error de elementos vacíos
-        if($this->distrito != '' and $this->provincia != '') 
-        {
-            $validacion = $this->validate([
-                'distrito' => 'required',
-                'provincia' => 'required',
-                'new_comuna' => 'required',
-            ]);
-            dd($validacion);
-            Comuna::create($validacion);
-        }
-
+        $validacion = $this->validate(['distrito' => 'required', 'provincia' => 'required', 'new_comuna' => 'required']);
+        Comuna::create([
+            'distrito_id' => $this->distrito,
+            'provincia_id' => $this->provincia,
+            'nombre' => $this->new_comuna,
+        ]);
+        $this->emit('mensajear', 'Registro agregado corectamente');
 
 
 

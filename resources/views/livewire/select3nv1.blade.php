@@ -33,6 +33,7 @@
         </select>
     </div>
     @if($mostrar_nueva_comuna)
+    {{$new_comuna}}
         <div wire:ignore.self class="input-group mb-3">
             <input wire:model="new_comuna" type="text" class="form-control" placeholder="Nueva comuna" name="new_comuna">
             <button wire:click="agregar_nueva_comuna" class="btn btn-outline-primary" type="button">Guardar</button>                   
@@ -40,3 +41,29 @@
         <small class="text-danger">@error('new_comuna') {{ $message }} @enderror</small>
     @endif
 </div>
+
+
+@push('scripts')
+    <script>
+        Livewire.on('mensajear', mensaje => {
+            toastr.options = {
+                "closeButton": false,
+                "debug": false,
+                "newestOnTop": false,
+                "progressBar": false,
+                "positionClass": "toast-top-right",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+            toastr["success"](mensaje)
+        })
+    </script>
+@endpush
