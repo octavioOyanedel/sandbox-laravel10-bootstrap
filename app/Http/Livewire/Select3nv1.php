@@ -19,8 +19,8 @@ class Select3nv1 extends Component
     public $new_provincia = '';
     public $new_comuna = '';
 
-    // validaciones
-    public $val_comuna = '';
+    // elementos seleccionados
+    public $comuna_selected = '';
 
     // estado actual de distrito
     public $distrito_actual = '';
@@ -56,28 +56,50 @@ class Select3nv1 extends Component
         {
             $this->provincias = Provincia::where('distrito_id', $this->distrito)->pluck('nombre', 'id')->toarray();
         }
-
-        if($this->distrito != '' and $this->provincia != '')
-        {
-            $this->comunas = Comuna::where('provincia_id', $this->provincia)->pluck('nombre', 'id')->toarray();
-        }
+        $this->cargar_comunas();
     }
 
     // bloque agregar nuevos registros
     public function agregar_nueva_comuna()
     {
         $validacion = $this->validate(['distrito' => 'required', 'provincia' => 'required', 'new_comuna' => 'required']);
-        Comuna::create([
+        $comuna = Comuna::create([
             'distrito_id' => $this->distrito,
             'provincia_id' => $this->provincia,
             'nombre' => $this->new_comuna,
         ]);
+        // una vez almacenado nuevo registro de debe actualizar componente y dejar como selected el nuevo registro       
+        $this->cargar_comunas2($comuna->id, 1);
+
+        // posterior a actualizado de componente se debe ocultar nuevo registro
+
         $this->emit('mensajear', 'Registro agregado corectamente');
 
 
 
 
 
+    }
+
+    // cargar comuna
+    public function cargar_comunas()
+    {
+        if($this->distrito != '' and $this->provincia != '')
+        {
+            // $this->comunas = Comuna::where('provincia_id', $this->provincia)->orderBy('nombre', 'asc')->pluck('nombre', 'id')->toarray();        
+            $this->comunas = Comuna::where('provincia_id', $this->provincia)->orderBy('nombre', 'asc');        
+        }
+    }
+
+    public function cargar_comunas2($id, $tipo)
+    {
+        if($this->distrito != '' and $this->provincia != '')
+        {
+            //$comunas = Comuna::where('provincia_id', $this->provincia)->orderBy('nombre', 'asc')->pluck('nombre', 'id')->toarray();
+            $this->comunas = Comuna::where('provincia_id', $this->provincia)->orderBy('nombre', 'asc');
+            //$this->comunas = obtener_nuevo_arreglo($comunas, (int)$id, (int)$tipo);
+            //dd($this->comunas);
+        }
     }
 
     // bloque nuevos registros
