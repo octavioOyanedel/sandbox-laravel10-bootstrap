@@ -1,25 +1,18 @@
 <?php
+
 # Helper para módulo de select cascada de 3 niveles
 
+use App\Models\Distrito;
+
 # genera nuevo array con el nuevo registro en primera posición
-# 0 : proviene de carga inicial
-# 1 : proviene de carga con nuevo registro
-function obtener_nuevo_arreglo($array, $id, $tipo)
+function preparar_coleccion_distritos_para_recarga_select($distritos, $id)
 {
-	$array_ = [];
-	if($id != 0 and $tipo != 0)
-	{
-		//sacar elemento
-		$nombre = $array[$id];
-		unset($array[$id]);
-		//reverse array
-		$array_ = array_reverse($array, true);
-		//agregar elemento
-		$array_[$id] = $nombre;
-		//reverse array
-		$array_ = array_reverse($array_, true);	
-	}
-	return $array_;
+	$distritos = Distrito::orderBy('nombre', 'asc')->get();	
+	// preparar colección para re-poblado de select
+	$distrito = $distritos->firstWhere('id', $id);
+	$distritos->prepend($distrito);
+	$distritos = $distritos->unique('nombre');
+	return $distritos;
 }
 
 ?>
