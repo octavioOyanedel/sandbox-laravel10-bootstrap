@@ -8,8 +8,10 @@
         <label for="floatingSelect">Selecciona región ...</label>
     </div>
     {{-- <span class="mt-2 badge bg-success float-end">Success</span> --}}
-    <button wire:click="boton_distrito" type="button" class="mt-2 mb-2 btn btn-primary btn-sm float-end">Nueva región</button>
-
+    <button wire:click="boton_distrito" type="button" class="mt-2 mb-2 btn btn-primary btn-sm float-end">
+        <i class="fa fa-copy"></i>  Nueva región
+    </button>
+    
     @if($ver_new_distrito)
         <div class="input-group mb-3">
             <input wire:ignore.self wire:model="new_distrito" type="text" class="form-control input-group-sm" placeholder="Nueva región" name="new_distrito">
