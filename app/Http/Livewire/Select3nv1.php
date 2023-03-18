@@ -12,16 +12,14 @@ class Select3nv1 extends Component
     // variables distrito
     public $distrito = '';
     public $distritos = [];
-    public $new_distrito = '';
-    public $ver_new_distrito = false;
-    public $ver_icono_mas_distrito = true;
 
     // variables provincia
     public $provincia = '';
     public $provincias = [];
-    public $new_provincia = '';
-    public $ver_new_provincia = false;
-    public $ver_icono_mas_provincia = true;
+
+    // variables comuna
+    public $comuna = '';
+    public $comunas = [];
 
     public function render()
     {
@@ -33,52 +31,15 @@ class Select3nv1 extends Component
         $this->distritos = Distrito::orderBy('nombre', 'asc')->get();
     }
 
-    public function updated()
+    public function updatedDistrito($value)
     {
-        $this->provincias = Provincia::where('distrito_id', $this->distrito)->orderBy('nombre', 'asc')->get();
+        $this->provincias = Provincia::where('distrito_id', $value)->orderBy('nombre', 'asc')->get();
+        $this->comunas = [];
+
     }
 
-    public function agregar_distrito()
+    public function updatedProvincia($value)
     {
-        $this->distrito = '';
-        $validacion = $this->validate(['new_distrito' => 'required']);
-        $distrito = Distrito::create([
-            'nombre' => $this->new_distrito,
-        ]);
-        $this->distrito = '';
-        $this->new_distrito = '';
-        $this->distritos = preparar_coleccion_para_recarga_select(Distrito::orderBy('nombre', 'asc')->get(), $distrito->id);
-        $this->ver_new_distrito = false;    
-        $this->ver_icono_mas_distrito =! $this->ver_icono_mas_distrito;
-        $this->emit('mensajear', 'Registro agregado corectamente');
+        $this->comunas = Comuna::where('distrito_id', $this->distrito)->where('provincia_id', $value)->orderBy('nombre', 'asc')->get();
     }
-
-    public function agregar_provincia()
-    {
-        $this->provincia = '';
-        $validacion = $this->validate(['distrito' => 'required', 'new_provincia' => 'required']);
-        $provincia = Provincia::create([
-            'distrito_id' =>  $this->distrito,
-            'nombre' => $this->new_provincia,
-        ]);
-        $this->provincia = '';
-        $this->new_provincia = '';
-        $this->provincias = preparar_coleccion_para_recarga_select(Provincia::where('distrito_id', $this->distrito)->orderBy('nombre', 'asc')->get(), $provincia->id);
-        $this->ver_new_provincia = false;    
-        $this->ver_icono_mas_provincia =! $this->ver_icono_mas_provincia;
-        $this->emit('mensajear', 'Registro agregado corectamente');
-    }
-
-    // manejo de botones
-    public function boton_distrito()
-    {
-        $this->ver_new_distrito =! $this->ver_new_distrito;
-        $this->ver_icono_mas_distrito =! $this->ver_icono_mas_distrito;
-    }
-
-    public function boton_provincia()
-    {
-        $this->ver_new_provincia =! $this->ver_new_provincia;
-        $this->ver_icono_mas_provincia =! $this->ver_icono_mas_provincia;
-    }      
 }
