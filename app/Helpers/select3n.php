@@ -5,14 +5,13 @@
 use App\Models\Distrito;
 
 # genera nuevo array con el nuevo registro en primera posición
-function preparar_coleccion_distritos_para_recarga_select($distritos, $id)
+function preparar_coleccion_para_recarga_select($coleccion, $id)
 {
-	$distritos = Distrito::orderBy('nombre', 'asc')->get();	
 	// preparar colección para re-poblado de select
-	$distrito = $distritos->firstWhere('id', $id);
-	$distritos->prepend($distrito);
-	$distritos = $distritos->unique('nombre');
-	return $distritos;
+	$objeto = $coleccion->firstWhere('id', $id);
+	$coleccion->prepend($objeto);
+	$coleccion = $coleccion->unique('nombre');
+	return $coleccion;
 }
 
 ?>
